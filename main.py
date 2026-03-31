@@ -56,12 +56,15 @@ except json.JSONDecodeError:
         quizzes = default_quiz
 
 
+#게임 종료 플래그
+is_exit = False
 
 # ==========================================
 # 메인 메뉴 루프
 # ==========================================
 while True:
-
+    if is_exit == True:
+        break
     print('========================')
     print('나만의 퀴즈 게임')
     print('========================')
@@ -83,18 +86,59 @@ while True:
     except (KeyboardInterrupt, EOFError):
         print('프로그램을 종료합니다. [Ctrl+C 또는 EOFError 발생]')
         break
-    if 0 < opt or opt < 5:
+    if 0 >= opt or opt > 5:
         print('잘못된 입력입니다, 메뉴를 확인하고 다시 입력 해 주세요.')
         continue
     if opt == 1:
-        print('퀴즈를 시작합니다.')
         # 퀴즈가 없는 경우의 처리 
         if len(quizzes) == 0:
             print('등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가 해 주세요.')
             continue;
+        print(f'퀴즈를 시작합니다. 총 {len(quizzes)}문제')
+        print('============================')
+        #점수 초기화
         score = 0
-        for 
-
+        #문제 출력
+        for i in range(len(quizzes)):
+            if is_exit == True:
+                break
+            print(f'[문제 {i+1}]')
+            print(f'{quizzes[i].question}')
+            for j in range(len(quizzes[i].choices)):
+                print(f'{j+1}. {quizzes[i].choices[j]}')
+        #사용자의 입력 검증
+            while True:
+                try:
+                    user_raw_answer = input('정답 입력 : ').strip()
+                    #공백 입력
+                    if user_raw_answer == '':
+                        print('잘못된 입력입니다. [Enter]가 입력됨')
+                        continue
+                    user_answer = int(user_raw_answer)
+                    #선택지 외 입력
+                    if user_answer < 1 or user_answer > len(quizzes[i].choices):
+                        print('잘못된 입력입니다. 범위 내 선택지를 입력 하세요.')
+                        continue
+                    #정답 검증
+                    if quizzes[i].check_answer(user_answer):
+                        print('정답입니다.')
+                        score += 1
+                    else:
+                        print('오답입니다.')
+                    break
+                #숫자가 아닌 값 입력
+                except ValueError:
+                    print('잘못된 입력입니다. 숫자를 입력하세요.')
+                    continue
+                #시그널 입력
+                except (KeyboardInterrupt, EOFError):
+                    print('프로그램을 종료합니다. [Ctrl+C 또는 EOFError 발생]')
+                    is_exit = True
+                    break
+        #문제 풀이 후 스코어 및 정답 개수 처리
+        if not is_exit:
+            print(f'{len(quizzes)}문제 중 {score}문제 정답!')
+        
     elif opt == 2:
         print('퀴즈를 추가합니다')
     elif opt == 3:
