@@ -8,8 +8,12 @@ while True:
     print('4. 점수 확인')
     print('5. 종료')
     print('========================')
-    opt = int(input('선택'))
-    
+    try:
+        opt = int(input('선택').strip())
+    except ValueError:
+        print('잘못된 입력입니다.')
+        print('숫자를 입력하세요.')
+        continue
     if opt == 1:
         print('퀴즈를 시작합니다.')
     elif opt == 2:
