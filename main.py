@@ -9,19 +9,53 @@ class Quiz:
         self.choices = choices
         self.answer = answer
 
+    def quiz_display(self):
+        print("문제 :", self.question)
+        for i in range(len(self.choices)):
+            print(f"  {i + 1}. {self.choices[i]}")
+
+    def check_answer(self, user_answer):
+        if self.answer == user_answer:
+            return True
+        return False
+
+# ==========================================
+# Default Quiz / state.json 로드 불가시 사용
+# ========================================== 
+default_quiz = [
+    Quiz("볼링 한 게임은 몇 프레임으로 구성되어 있는가?", ["8프레임", "10프레임", "12프레임", "15프레임"], 2),
+    Quiz("모든 핀을 첫 번째 투구에서 쓰러뜨리는 것을 무엇이라 하는가?",["스페어", "스트라이크", "거터", "터키"],2),
+    Quiz("볼링 핀은 총 몇 개인가?",["8개", "10개", "12개", "15개"],2),
+    Quiz("3연속 스트라이크를 무엇이라 부르는가?",["더블", "터키", "트리플", "햄본"],2),
+    Quiz("볼링의 최고 점수(퍼펙트 게임)는 몇 점인가?",["200점", "250점", "280점", "300점"],4)
+]
+
+# ==========================================
+# Quiz의 객체 리스트
+# ========================================== 
+quizzes = []
+
 # ==========================================
 # state.json에서 퀴즈 데이터 불러오기
 # ==========================================
-with open("state.json", "r", encoding="utf-8") as f:
-    data = json.load(f)
+try:
+    with open("state.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+        # ==========================================
+        # 데이터 정상 로드 시, 파일 -> 객체 변환 작업을 진행
+        # 퀴즈 데이터 역직렬화 (deserialization)
+        # ==========================================
+        for item in data["quizzes"]:
+            q = Quiz(item["question"],item["choices"], item["answer"])
+            quizzes.append(q)
+except FileNotFoundError:
+        print("파일이 존재하지 않습니다, 기본 퀴즈로 진행합니다.")
+        quizzes = default_quiz
+except json.JSONDecodeError:
+        print("파일 변환에 실패하였습니다, 기본 퀴즈로 진행합니다.")
+        quizzes = default_quiz
 
-# ==========================================
-# 퀴즈 데이터 역직렬화 (deserialization) | 파일 -> 객체
-# ==========================================
-quizzes = []
-for item in data["quizzes"]:
-    q = Quiz(item["question"],item["choices"], item["answer"])
-    quizzes.append(q)
+
 
 # ==========================================
 # 메인 메뉴 루프
@@ -54,6 +88,13 @@ while True:
         continue
     if opt == 1:
         print('퀴즈를 시작합니다.')
+        # 퀴즈가 없는 경우의 처리 
+        if len(quizzes) == 0:
+            print('등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가 해 주세요.')
+            continue;
+        score = 0
+        for 
+
     elif opt == 2:
         print('퀴즈를 추가합니다')
     elif opt == 3:
