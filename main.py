@@ -1,4 +1,33 @@
+import json
+
+# ==========================================
+# Quiz 클래스 정의
+# ==========================================
+class Quiz:
+    def __init__(self, question, choices, answer):
+        self.question = question
+        self.choices = choices
+        self.answer = answer
+
+# ==========================================
+# state.json에서 퀴즈 데이터 불러오기
+# ==========================================
+with open("state.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+# ==========================================
+# 퀴즈 데이터 역직렬화 (deserialization) | 파일 -> 객체
+# ==========================================
+quizzes = []
+for item in data["quizzes"]:
+    q = Quiz(item["question"],item["choices"], item["answer"])
+    quizzes.append(q)
+
+# ==========================================
+# 메인 메뉴 루프
+# ==========================================
 while True:
+
     print('========================')
     print('나만의 퀴즈 게임')
     print('========================')
@@ -18,9 +47,9 @@ while True:
         print('잘못된 입력입니다. 숫자를 입력하세요.')
         continue
     except (KeyboardInterrupt, EOFError):
-        print('잘못된 입력입니다. [Ctrl+C 또는 EOFError 발생]')
+        print('프로그램을 종료합니다. [Ctrl+C 또는 EOFError 발생]')
         break
-    if 0 >= opt or opt >= 6:
+    if 0 < opt or opt < 5:
         print('잘못된 입력입니다, 메뉴를 확인하고 다시 입력 해 주세요.')
         continue
     if opt == 1:
