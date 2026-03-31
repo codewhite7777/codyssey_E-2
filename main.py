@@ -147,7 +147,12 @@ while True:
     elif opt == 2:
         print('퀴즈를 추가합니다')
     elif opt == 3:
-        print('등록된 퀴즈 목록 (총 n개')
+        if len(quizzes) == 0:
+            print('등록된 퀴즈가 없습니다.')
+        else:
+            print(f'등록된 퀴즈 목록 (총 {len(quizzes)}개)')
+            for i in range(len(quizzes)):
+                print(f' [{i+1}] {quizzes[i].question}')
     elif opt == 4:
         if best_score is None:
             print(f'아직 문제를 풀지 않았습니다.')
