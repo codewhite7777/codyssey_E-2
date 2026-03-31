@@ -20,6 +20,23 @@ class Quiz:
         return False
 
 # ==========================================
+# 퀴즈 저장 메서드
+# ========================================== 
+def save_data(quizzes, best_core):
+    data = {
+        "quizzes": [],
+        "best_score": best_score
+    }
+    for q in quizzes:
+        data["quizzes"].append({
+            "question": q.question,
+            "choices": q.choices,
+            "answer": q.answer
+        })
+    with open("state.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+# ==========================================
 # Default Quiz / state.json 로드 불가시 사용
 # ========================================== 
 default_quiz = [
@@ -88,6 +105,7 @@ while True:
         continue
     except (KeyboardInterrupt, EOFError):
         print('프로그램을 종료합니다. [Ctrl+C 또는 EOFError 발생]')
+        save_data(quizzes, best_score)
         break
     if 0 >= opt or opt > 5:
         print('잘못된 입력입니다, 메뉴를 확인하고 다시 입력 해 주세요.')
@@ -147,24 +165,37 @@ while True:
     elif opt == 2:
         print('퀴즈를 추가합니다')
         while True:
-            tmp_quiz = input('퀴즈 입력 : ').strip()
-            if tmp_quiz == '':
-                print('퀴즈를 입력 해 주세요.')
-                continue
-            tmp_choices = input('선택지 입력 (,로 구분) : ').split(',')
             try:
+                tmp_quiz = input('퀴즈 입력 : ').strip()
+                if tmp_quiz == '':
+                    print('퀴즈를 입력 해 주세요.')
+                    continue
+                result = []
+                tmp_choices = input('선택지 입력 (,로 구분, 기본 4개) : ').split(',')
+                for c in tmp_choices:
+                    result.append(c.strip())
+                tmp_choices = result
+                if len(tmp_choices) < 4:
+                    print('선택지는 최소 4개 이상 입력해 주세요.')
+                    continue
                 tmp_raw = input('정답 입력 :').strip()
                 tmp_answer = int(tmp_raw)
-                if tmp_answer < 0 or tmp_answer > len(tmp_choices):
+                if tmp_answer < 1 or tmp_answer > len(tmp_choices):
                     print('선택지보다 큰 정답이 입력되었습니다')
                     continue
             except ValueError:
                 print('잘못된 정답이 입력되었습니다.')
                 continue
+            except (KeyboardInterrupt, EOFError):
+                    print('프로그램을 종료합니다. [Ctrl+C 또는 EOFError 발생]')
+                    is_exit = True
+                    break
             #객체 생성
             new_quiz = Quiz(tmp_quiz, tmp_choices, tmp_answer)
             #퀴즈 리스트 추가
             quizzes.append(new_quiz)
+            print('퀴즈가 추가되었습니다.')
+            break
     elif opt == 3:
         if len(quizzes) == 0:
             print('등록된 퀴즈가 없습니다.')
@@ -182,3 +213,5 @@ while True:
         break
     else:
         print('잘못된 입력입니다.')
+save_data(quizzes, best_score)
+print('저장되었습니다.')
