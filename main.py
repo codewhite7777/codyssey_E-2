@@ -146,14 +146,25 @@ while True:
                 best_score = score
     elif opt == 2:
         print('퀴즈를 추가합니다')
-        tmp_quiz = input('퀴즈 입력 : ')
-        tmp_choices = input('선택지 입력 (,로 구분) : ').split(',')
-        tmp_answer = int(input('정답 입력 :'))
-        #Todo 입력에 관한 예외처리
-        #객체 생성
-        new_quiz = Quiz(tmp_quiz, tmp_choices, tmp_answer)
-        #퀴즈 리스트 추가
-        quizzes.append(new_quiz)
+        while True:
+            tmp_quiz = input('퀴즈 입력 : ').strip()
+            if tmp_quiz == '':
+                print('퀴즈를 입력 해 주세요.')
+                continue
+            tmp_choices = input('선택지 입력 (,로 구분) : ').split(',')
+            try:
+                tmp_raw = input('정답 입력 :').strip()
+                tmp_answer = int(tmp_raw)
+                if tmp_answer < 0 or tmp_answer > len(tmp_choices):
+                    print('선택지보다 큰 정답이 입력되었습니다')
+                    continue
+            except ValueError:
+                print('잘못된 정답이 입력되었습니다.')
+                continue
+            #객체 생성
+            new_quiz = Quiz(tmp_quiz, tmp_choices, tmp_answer)
+            #퀴즈 리스트 추가
+            quizzes.append(new_quiz)
     elif opt == 3:
         if len(quizzes) == 0:
             print('등록된 퀴즈가 없습니다.')
