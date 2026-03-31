@@ -48,13 +48,16 @@ try:
         for item in data["quizzes"]:
             q = Quiz(item["question"],item["choices"], item["answer"])
             quizzes.append(q)
+        #최고 점수 로드
+        best_score = data["best_score"]
 except FileNotFoundError:
         print("파일이 존재하지 않습니다, 기본 퀴즈로 진행합니다.")
         quizzes = default_quiz
+        best_score = None
 except json.JSONDecodeError:
         print("파일 변환에 실패하였습니다, 기본 퀴즈로 진행합니다.")
         quizzes = default_quiz
-
+        best_score = None
 
 #게임 종료 플래그
 is_exit = False
@@ -93,7 +96,7 @@ while True:
         # 퀴즈가 없는 경우의 처리 
         if len(quizzes) == 0:
             print('등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가 해 주세요.')
-            continue;
+            continue
         print(f'퀴즈를 시작합니다. 총 {len(quizzes)}문제')
         print('============================')
         #점수 초기화
@@ -138,13 +141,18 @@ while True:
         #문제 풀이 후 스코어 및 정답 개수 처리
         if not is_exit:
             print(f'{len(quizzes)}문제 중 {score}문제 정답!')
-        
+            if best_score is None or score > best_score:
+                print('새로운 최고 점수입니다.')
+                best_score = score
     elif opt == 2:
         print('퀴즈를 추가합니다')
     elif opt == 3:
         print('등록된 퀴즈 목록 (총 n개')
     elif opt == 4:
-        print('최고 점수 : n점 (k문제 중 p개 정답)')
+        if best_score is None:
+            print(f'아직 문제를 풀지 않았습니다.')
+        else:
+            print(f'최고 점수 : {best_score}문제 정답')
     elif opt == 5:
         print('종료')
         break
