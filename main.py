@@ -149,13 +149,16 @@ class	QuizGame:
 				self.best_score = score
 
 	def	add_quiz(self):
-		print('퀴즈를 추가합니다')
+		print('퀴즈를 추가합니다 (취소: q)')
 		while True:
 			try:
 				tmp_quiz = input('퀴즈 입력 : ').strip()
 				if tmp_quiz == '':
 					print('퀴즈를 입력 해 주세요.')
 					continue
+				if tmp_quiz == 'q':
+					print('퀴즈 추가를 취소합니다.')
+					break
 				result = []
 				tmp_choices = input('선택지 입력 (,로 구분, 기본 4개) : ').split(',')
 				for c in tmp_choices:
