@@ -83,7 +83,10 @@ class	QuizGame:
 			})
 		with open("state.json", "w", encoding="utf-8") as f:
 			json.dump(data, f, ensure_ascii=False, indent=4)
-
+	
+    # ==========================================
+	# 퀴즈 메인화면 렌더링 메서드
+	# ==========================================
 	def	show_menu(self):
 		print('========================')
 		print('나만의 퀴즈 게임')
@@ -94,7 +97,10 @@ class	QuizGame:
 		print('4. 점수 확인')
 		print('5. 종료')
 		print('========================')
-	
+
+	# ==========================================
+	# 퀴즈 플레이 메서드
+	# ==========================================
 	def play_quiz(self):
 		# 퀴즈가 없는 경우의 처리 
 		if len(self.quizzes) == 0:
@@ -148,6 +154,9 @@ class	QuizGame:
 				print('새로운 최고 점수입니다.')
 				self.best_score = score
 
+	# ==========================================
+	# 퀴즈 추가 메서드
+	# ==========================================
 	def	add_quiz(self):
 		print('퀴즈를 추가합니다 (취소: q)')
 		while True:
@@ -186,6 +195,9 @@ class	QuizGame:
 			print('퀴즈가 추가되었습니다.')
 			break
 
+	# ==========================================
+	# 퀴즈 리스트 출력 메서드
+	# ==========================================
 	def	show_quiz_list(self):
 		if len(self.quizzes) == 0:
 			print('등록된 퀴즈가 없습니다.')
@@ -194,12 +206,18 @@ class	QuizGame:
 			for i in range(len(self.quizzes)):
 				print(f' [{i+1}] {self.quizzes[i].question}')
 
+	# ==========================================
+	# 퀴즈 스코어 출력 메서드
+	# ==========================================
 	def	show_score(self):
 		if self.best_score is None:
 			print(f'아직 문제를 풀지 않았습니다.')
 		else:
 			print(f'최고 점수 : {self.best_score}점')
 
+	# ==========================================
+	# 퀴즈 입력 처리 메서드
+	# ==========================================
 	def	run(self):
 		while True:
 			if self.is_exit == True:
