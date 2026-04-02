@@ -22,6 +22,7 @@ codyssey_E1-2/
 ├── main.py        # 메인 실행 파일 (Quiz, QuizGame 클래스 포함)
 ├── state.json     # 퀴즈 데이터 및 최고 점수 저장 파일
 ├── .gitignore     # Git 추적 제외 파일 목록
+├── doc            # 프로젝트에서 요구한 실행, 환경화면 스크린샷
 └── README.md      # 프로젝트 설명 문서
 데이터 파일 설명
 
